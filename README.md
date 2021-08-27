@@ -1,2 +1,1 @@
-A simple script to genrate rpms from sddm theme tar.gzs
-(WIP)
+A simple script to genrate rpms from sddm theme tar files from pling.
