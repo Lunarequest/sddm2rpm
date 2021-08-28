@@ -4,14 +4,23 @@ use std::path::Path;
 use std::str::FromStr;
 use walkdir;
 
-pub fn buildrpm(source: &String, name: String) {
+pub fn buildrpm(source: &String, name: String, version: String, license: String) {
     let current_dir = env::current_dir().unwrap();
     let wd = Path::new(source);
     assert!(env::set_current_dir(wd).is_ok());
     // rpm-rs handles setting up the compressor lets use it
-    let mut pkg =
-        rpm::RPMBuilder::new(name.as_str(), "1.0.0", "GPL", "noarch", "autogenrated rpms")
-            .compression(rpm::Compressor::from_str("gzip").unwrap());
+    let mut pkg = rpm::RPMBuilder::new(
+        name.as_str(),
+        version.as_str(),
+        license.as_str(),
+        "noarch",
+        "autogenrated sddm theme rpm",
+    )
+    .compression(rpm::Compressor::from_str("gzip").unwrap())
+    .requires(rpm::Dependency::any("kf5-plasma"))
+    .requires(rpm::Dependency::any("qt5-qtquickcontrols"))
+    .requires(rpm::Dependency::any("desktop-backgrounds-compat"));
+
     for entry in walkdir::WalkDir::new(".")
         .into_iter()
         .filter_map(|e| e.ok())
