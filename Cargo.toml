@@ -6,8 +6,10 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+bzip2 = "0.4.3"
 clap = "2.33.3"
 flate2 = "1.0.20"
 rpm-rs = { git = "https://github.com/advaithm/rpm-rs.git" }
 tar = "0.4.37"
 walkdir = "2.3.2"
+xz2 = "0.1.6"

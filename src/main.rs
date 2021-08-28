@@ -3,7 +3,7 @@ mod archive;
 mod rpm_build;
 
 fn name_from_file(filename: &String) -> String {
-    return filename.to_owned().replace(".tar.gz", "");
+    return filename.to_owned().replace(".tar", "").replace(".xz", "").replace(".bz2", "").replace(".gz", "");
 }
 
 fn main() {
