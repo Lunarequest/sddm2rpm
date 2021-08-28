@@ -1,6 +1,7 @@
 use clap::{App, Arg};
 mod archive;
 mod rpm_build;
+mod spec_builder;
 
 fn name_from_file(filename: &String) -> String {
     return filename

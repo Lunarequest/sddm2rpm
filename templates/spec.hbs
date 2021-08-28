@@ -1,0 +1,32 @@
+# this file was auto genrated by sddm2rpm
+Name: {{ name }}
+Summary: {{ summary }}
+License: {{ license }}
+Version: {{ Version }}
+Release: %autorelease
+{{#if url ~}}
+URL: {{ url }}
+{{/if}}
+Source0: {{ source }}
+Requires:       kf5-plasma >= %{_kf5_version}
+# Background.qml:import QtQuick
+Requires:       qt5-qtquickcontrols	
+# on-screen keyboard
+Recommends:     qt5-qtvirtualkeyboard
+# QML imports:
+# org.kde.plasma.workspace.components
+# org.kde.plasma.workspace.keyboardlayout
+Requires:       %{name} = %{version}-%{release}
+
+%prep
+%autosetup
+ 
+%build
+{{ build_commands }}
+
+%files
+{{ files }}
+
+%changelog
+%autochangelog
+	
