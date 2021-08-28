@@ -16,7 +16,7 @@ pub fn buildrpm(source: &String, name: String, version: String, license: String)
         "noarch",
         "autogenrated sddm theme rpm",
     )
-    .compression(rpm::Compressor::from_str("gzip").unwrap())
+    .compression(rpm::Compressor::from_str("zstd").unwrap())
     .requires(rpm::Dependency::any("kf5-plasma"))
     .requires(rpm::Dependency::any("qt5-qtquickcontrols"))
     .requires(rpm::Dependency::any("desktop-backgrounds-compat"));
