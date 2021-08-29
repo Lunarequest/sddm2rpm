@@ -2,7 +2,7 @@
 Name: {{ name }}
 Summary: {{ summary }}
 License: {{ license }}
-Version: {{ Version }}
+Version: {{ version }}
 Release: %autorelease
 {{#if url ~}}
 URL: {{ url }}
@@ -10,7 +10,7 @@ URL: {{ url }}
 Source0: {{ source }}
 Requires:       kf5-plasma >= %{_kf5_version}
 # Background.qml:import QtQuick
-Requires:       qt5-qtquickcontrols	
+Requires:       qt5-qtquickcontrols
 # on-screen keyboard
 Recommends:     qt5-qtvirtualkeyboard
 # QML imports:
@@ -18,10 +18,16 @@ Recommends:     qt5-qtvirtualkeyboard
 # org.kde.plasma.workspace.keyboardlayout
 Requires:       %{name} = %{version}-%{release}
 
+%description
+auto genrated spec file for sddm theme {{ name }}
+
 %prep
 %autosetup
  
 %build
+# we don't need one
+
+%install
 {{ build_commands }}
 
 %files
@@ -29,4 +35,3 @@ Requires:       %{name} = %{version}-%{release}
 
 %changelog
 %autochangelog
-	

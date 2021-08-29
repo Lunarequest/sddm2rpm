@@ -1,45 +1,51 @@
 use handlebars::Handlebars;
 use serde::Serialize;
+use std::env;
 use std::fs::read_dir;
+use std::path::Path;
 
 const DEFAULT_SPEC_TEMPLATE: &str = include_str!("../templates/spec.hbs");
 #[derive(Serialize)]
 pub struct SpecParams {
     // Name of the RPM
     pub name: String,
-
     // Description of the RPM
     pub summary: String,
-
+    // version of package
+    pub version: String,
     // License of the *binary* contents of the RPM
     pub license: String,
-
     // URL to a home page for this package
     pub url: Option<String>,
     // commands to build the rpm
     pub build_commands: String,
     // files in rpm
     pub files: String,
+    // source files
+    pub source: String,
 }
 
 pub fn gen_spec(
     source: &String,
+    unpacked: String,
     name: String,
     version: String,
     license: String,
     url: Option<String>,
 ) -> Result<String, ()> {
-    let build_commands = gen_build_commands(source, name);
+    let build_commands = gen_build_commands(&unpacked, &name);
     let files = format!("%{{_datadir}}/sddm/themes/{}", name);
     let summary = format!("Auto genrated specfile for {} sddm theme", name);
     let mut handlebars = Handlebars::new();
     let data = SpecParams {
-        name,
-        summary,
-        license,
-        url,
-        build_commands,
-        files,
+        name: name.clone(),
+        summary: summary,
+        version: version,
+        license: license,
+        url: url,
+        build_commands: build_commands,
+        files: files,
+        source: source.to_owned(),
     };
     handlebars
         .register_template_string(&name.as_str(), DEFAULT_SPEC_TEMPLATE)
@@ -49,15 +55,25 @@ pub fn gen_spec(
         .expect("error rendering template"));
 }
 
-fn gen_build_commands(source: &String, name: String) -> String {
+fn gen_build_commands(source: &String, name: &String) -> String {
     let mut build_commands = String::new();
+    let current_dir = env::current_dir().unwrap();
+    let wd = Path::new(&source);
+    println!("{}", wd.display());
+    assert!(env::set_current_dir(wd).is_ok());
     build_commands =
-        build_commands + format!("mkdir %{{buildroot}}/usr/share/sddm/themes/{}\n", name);
-    let pkg_dir = read_dir(source);
-    build_commands = build_commands
-        + format!(
-            "cp -r {} %{{buildroot}}/usr/share/sddm/themes/{}",
-            name, name
-        );
+        build_commands + format!("mkdir %{{buildroot}}/usr/share/sddm/themes/{}\n", name).as_str();
+    let pkg_dir = read_dir(Path::new(".")).expect("unable to readdir");
+    for entry in pkg_dir {
+        let src = entry.unwrap().path().to_str().unwrap().replace("./", "");
+        println!("{}", src);
+        build_commands = build_commands
+            + format!(
+                "cp -r %{{_sourcedir}}/{} %{{buildroot}}/usr/share/sddm/themes/{}",
+                src, name
+            )
+            .as_str();
+    }
+    assert!(env::set_current_dir(current_dir).is_ok());
     return build_commands;
 }

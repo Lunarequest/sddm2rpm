@@ -1,4 +1,6 @@
 use clap::{App, Arg};
+use std::fs::write;
+use std::path::Path;
 mod archive;
 mod rpm_build;
 mod spec_builder;
@@ -32,6 +34,21 @@ fn main() {
                 .takes_value(true),
         )
         .arg(
+            Arg::with_name("output-spec")
+                .long("output-spec")
+                .short("s")
+                .help("output spec file")
+                .value_name("SPEC")
+                .takes_value(false),
+        )
+        .arg(
+            Arg::with_name("url")
+                .help("upstream url for rpm")
+                .long("url")
+                .value_name("URL")
+                .takes_value(true),
+        )
+        .arg(
             Arg::with_name("source")
                 .required(true)
                 .help("path to sddm archive")
@@ -43,6 +60,11 @@ fn main() {
                 .index(2),
         )
         .get_matches();
+    let url;
+    match matches.value_of("url") {
+        Some(a) => url = Option::Some(a.to_owned().to_string()),
+        None => url = None,
+    }
     let source = matches.value_of("source").unwrap().to_owned().to_string();
     let dest = matches
         .value_of("dest")
@@ -50,12 +72,12 @@ fn main() {
         .to_owned()
         .to_string();
     let license = matches
-        .value_of("LICENSE")
+        .value_of("license")
         .unwrap_or("GPL")
         .to_owned()
         .to_string();
     let version = matches
-        .value_of("VERSION")
+        .value_of("version")
         .unwrap_or("1.0.0")
         .to_owned()
         .to_string();
@@ -63,6 +85,20 @@ fn main() {
     match archive::unpack(&source, &dest) {
         Ok(()) => {
             let name = name_from_file(&source);
+            if matches.is_present("output-spec") {
+                let spec = spec_builder::gen_spec(
+                    &source,
+                    dest.clone(),
+                    name.clone(),
+                    version.clone(),
+                    license.clone(),
+                    url,
+                )
+                .unwrap();
+                let spec_file_name = format!("{}.spec", name);
+                let spec_path = Path::new(&spec_file_name);
+                write(spec_path, spec).expect("unable to write spec");
+            }
             rpm_build::buildrpm(&dest, name, version, license);
             archive::cleanup(&dest);
         }
