@@ -59,14 +59,12 @@ fn gen_build_commands(source: &String, name: &String) -> String {
     let mut build_commands = String::new();
     let current_dir = env::current_dir().unwrap();
     let wd = Path::new(&source);
-    println!("{}", wd.display());
     assert!(env::set_current_dir(wd).is_ok());
     build_commands =
         build_commands + format!("mkdir %{{buildroot}}/usr/share/sddm/themes/{}\n", name).as_str();
     let pkg_dir = read_dir(Path::new(".")).expect("unable to readdir");
     for entry in pkg_dir {
         let src = entry.unwrap().path().to_str().unwrap().replace("./", "");
-        println!("{}", src);
         build_commands = build_commands
             + format!(
                 "cp -r %{{_sourcedir}}/{} %{{buildroot}}/usr/share/sddm/themes/{}",
