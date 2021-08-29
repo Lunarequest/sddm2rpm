@@ -2,6 +2,8 @@
 name = "sddm2rpm"
 version = "0.1.0"
 edition = "2018"
+description = "a simple cli tool to genrate rpms from plasma sddm tar.gz"
+license = "GPLv3"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -15,3 +17,13 @@ serde = { version="1.0.129",  features = ["serde_derive"] }
 tar = "0.4.37"
 walkdir = "2.3.2"
 xz2 = "0.1.6"
+zstd = "0.9.0"
+
+[package.metadata.rpm]
+package = "sddm2rpm"
+
+[package.metadata.rpm.cargo]
+buildflags = ["--release"]
+
+[package.metadata.rpm.targets]
+sddm2rpm = { path = "/usr/bin/sddm2rpm" }

@@ -4,6 +4,7 @@ use std::fs::{remove_dir_all, File};
 use std::path::Path;
 use tar::Archive;
 use xz2::read::XzDecoder;
+use zstd::stream::Decoder;
 
 fn unpack_gz(path: &Path, dest: &Path) {
     let tar_gz = File::open(path).unwrap();
@@ -26,6 +27,13 @@ fn unpack_bz2(path: &Path, dest: &Path) {
     archive.unpack(dest).unwrap();
 }
 
+fn unpack_zstd(path: &Path, dest: &Path) {
+    let tar_xz = File::open(path).unwrap();
+    let tar_from_zstd = Decoder::new(tar_xz).expect("is this properly encoded?");
+    let mut archive = Archive::new(tar_from_zstd);
+    archive.unpack(dest).unwrap();
+}
+
 pub fn unpack(source: &String, dest: &String) -> Result<(), ()> {
     let source_path = Path::new(source);
     let dest_path = Path::new(dest);
@@ -36,6 +44,8 @@ pub fn unpack(source: &String, dest: &String) -> Result<(), ()> {
             unpack_xz(source_path, dest_path);
         } else if source.ends_with(".bz2") {
             unpack_bz2(source_path, dest_path);
+        } else if source.ends_with(".zstd") {
+            unpack_zstd(source_path, dest_path);
         } else {
             panic!("compression not implemented yet")
         }
