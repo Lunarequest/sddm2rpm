@@ -29,7 +29,7 @@ fn main() {
         .arg(
             Arg::with_name("license")
                 .long("license")
-                .help("license of package, defaults to GPL")
+                .help("license of package, defaults to GPLv3")
                 .value_name("LICENSE")
                 .takes_value(true),
         )
@@ -73,7 +73,7 @@ fn main() {
         .to_string();
     let license = matches
         .value_of("license")
-        .unwrap_or("GPL")
+        .unwrap_or("GPLv3")
         .to_owned()
         .to_string();
     let version = matches
@@ -98,6 +98,7 @@ fn main() {
                 let spec_file_name = format!("{}.spec", name);
                 let spec_path = Path::new(&spec_file_name);
                 write(spec_path, spec).expect("unable to write spec");
+                println!("Please update the spec file with release number and change log.")
             }
             rpm_build::buildrpm(&dest, name, version, license);
             archive::cleanup(&dest);

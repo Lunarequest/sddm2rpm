@@ -3,7 +3,7 @@ Name: {{ name }}
 Summary: {{ summary }}
 License: {{ license }}
 Version: {{ version }}
-Release: %autorelease
+Release: 1%{?dist}
 {{#if url ~}}
 URL: {{ url }}
 {{/if}}
@@ -16,7 +16,7 @@ Recommends:     qt5-qtvirtualkeyboard
 # QML imports:
 # org.kde.plasma.workspace.components
 # org.kde.plasma.workspace.keyboardlayout
-Requires:       %{name} = %{version}-%{release}
+Requires:       plasma-workspace
 
 %description
 auto genrated spec file for sddm theme {{ name }}
@@ -34,4 +34,4 @@ auto genrated spec file for sddm theme {{ name }}
 {{ files }}
 
 %changelog
-%autochangelog
+# please add one before compiling
