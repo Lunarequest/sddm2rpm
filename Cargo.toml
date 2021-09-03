@@ -12,7 +12,7 @@ bzip2 = "0.4.3"
 clap = "2.33.3"
 flate2 = "1.0.20"
 handlebars = "4.1.2"
-rpm-rs = { git = "https://github.com/advaithm/rpm-rs.git" }
+rpm-rs = "0.7.0"
 serde = { version="1.0.129",  features = ["serde_derive"] }
 tar = "0.4.37"
 walkdir = "2.3.2"
