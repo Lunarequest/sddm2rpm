@@ -1,4 +1,4 @@
-use clap::{App, Arg};
+use clap::{Command, Arg};
 use std::fs::write;
 use std::path::Path;
 mod archive;
@@ -15,47 +15,46 @@ fn name_from_file(filename: &String) -> String {
 }
 
 fn main() {
-    let matches = App::new("sddm2rpm")
+    let matches = Command::new("sddm2rpm")
         .version("0.1.0")
         .about("takes sddm theme as tar.gz files and repacks them to rpms")
         .arg(
-            Arg::with_name("version")
-                .short("ver")
+            Arg::new("version")
                 .long("version")
                 .help("version of package, defaults to 1.0.0")
                 .value_name("VERSION")
                 .takes_value(true),
         )
         .arg(
-            Arg::with_name("license")
+            Arg::new("license")
                 .long("license")
                 .help("license of package, defaults to GPLv3")
                 .value_name("LICENSE")
                 .takes_value(true),
         )
         .arg(
-            Arg::with_name("output-spec")
+            Arg::new("output-spec")
                 .long("output-spec")
-                .short("s")
+                .short('s')
                 .help("output spec file")
                 .value_name("SPEC")
                 .takes_value(false),
         )
         .arg(
-            Arg::with_name("url")
+            Arg::new("url")
                 .help("upstream url for rpm")
                 .long("url")
                 .value_name("URL")
                 .takes_value(true),
         )
         .arg(
-            Arg::with_name("source")
+            Arg::new("source")
                 .required(true)
                 .help("path to sddm archive")
                 .index(1),
         )
         .arg(
-            Arg::with_name("dest")
+            Arg::new("dest")
                 .help("directory to unpack too")
                 .index(2),
         )
