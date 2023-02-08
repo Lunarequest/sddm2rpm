@@ -5,6 +5,8 @@ mod archive;
 mod rpm_build;
 mod spec_builder;
 
+const VERSION: &str = env!("CARGO_PKG_VERSION");
+
 fn name_from_file(filename: &String) -> String {
     return filename
         .to_owned()
@@ -16,7 +18,7 @@ fn name_from_file(filename: &String) -> String {
 
 fn main() {
     let matches = Command::new("sddm2rpm")
-        .version("0.1.0")
+        .version(VERSION)
         .about("takes sddm theme as tar.gz files and repacks them to rpms")
         .arg(
             Arg::new("version")
