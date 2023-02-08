@@ -1,2 +1,5 @@
 /target
-breeze-highcontrast-sddm.tar.gz
+*tar.*
+*.rpm
+*.spec
+.cargo
