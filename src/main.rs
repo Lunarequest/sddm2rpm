@@ -1,4 +1,4 @@
-use clap::{Command, Arg};
+use clap::{Arg, Command};
 use std::fs::write;
 use std::path::Path;
 mod archive;
@@ -53,11 +53,7 @@ fn main() {
                 .help("path to sddm archive")
                 .index(1),
         )
-        .arg(
-            Arg::new("dest")
-                .help("directory to unpack too")
-                .index(2),
-        )
+        .arg(Arg::new("dest").help("directory to unpack too").index(2))
         .get_matches();
     let url;
     match matches.value_of("url") {

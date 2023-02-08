@@ -14,6 +14,7 @@ flate2 = "1.0.20"
 handlebars = "4.1.2"
 rpm-rs = "0.8.1"
 serde = { version="1.0.129",  features = ["serde_derive"] }
+sys-info = "0.9.1"
 tar = "0.4.37"
 walkdir = "2.3.2"
 xz2 = "0.1.6"

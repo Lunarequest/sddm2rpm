@@ -8,21 +8,34 @@ Release: 1%{?dist}
 URL: {{ url }}
 {{/if}}
 Source0: {{ source }}
+BuildArch:  noarch
+# QML imports:
+# org.kde.plasma.workspace.components
+# org.kde.plasma.workspace.keyboardlayout
+Requires:       sddm
+
+%if 0%{?fedora}
+BuildRequires:  kf5-rpm-macros
 Requires:       kf5-plasma >= %{_kf5_version}
 # Background.qml:import QtQuick
 Requires:       qt5-qtquickcontrols
 # on-screen keyboard
 Recommends:     qt5-qtvirtualkeyboard
-# QML imports:
-# org.kde.plasma.workspace.components
-# org.kde.plasma.workspace.keyboardlayout
-Requires:       plasma-workspace
+%endif
+
+%if 0%{?suse_version}
+Requires:      libKF5Plasma5
+# Background.qml:import QtQuick
+Requires:       libqt5-qtquickcontrols
+# on-screen keyboard
+Recommends:     libqt5-qtvirtualkeyboards
+%endif
 
 %description
 auto genrated spec file for sddm theme {{ name }}
 
 %prep
-%autosetup
+%autosetup -n %{name}
  
 %build
 # we don't need one

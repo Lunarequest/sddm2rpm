@@ -1,7 +1,6 @@
 use handlebars::Handlebars;
 use serde::Serialize;
 use std::env;
-use std::fs::read_dir;
 use std::path::Path;
 
 const DEFAULT_SPEC_TEMPLATE: &str = include_str!("../templates/spec.hbs");
@@ -60,18 +59,13 @@ fn gen_build_commands(source: &String, name: &String) -> String {
     let current_dir = env::current_dir().unwrap();
     let wd = Path::new(&source);
     assert!(env::set_current_dir(wd).is_ok());
-    build_commands =
-        build_commands + format!("mkdir %{{buildroot}}/usr/share/sddm/themes/{}\n", name).as_str();
-    let pkg_dir = read_dir(Path::new(".")).expect("unable to readdir");
-    for entry in pkg_dir {
-        let src = entry.unwrap().path().to_str().unwrap().replace("./", "");
-        build_commands = build_commands
-            + format!(
-                "cp -r %{{_sourcedir}}/{} %{{buildroot}}/usr/share/sddm/themes/{}",
-                src, name
+    build_commands += format!("mkdir -p %{{buildroot}}/%{{_datadir}}/sddm/themes/{}\n", name).as_str();
+    
+    build_commands +=    format!(
+                "cp -r * %{{buildroot}}/%{{_datadir}}/sddm/themes/{}",
+                name
             )
             .as_str();
-    }
     assert!(env::set_current_dir(current_dir).is_ok());
-    return build_commands;
+    build_commands
 }
