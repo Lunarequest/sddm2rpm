@@ -23,27 +23,26 @@ distrobox create fedora && distrobox enter fedora
 
 ### 2. Dependencies, Downloading
 ```
-sudo dnf upgrade -y
-sudo dnf install cargo rustc git
+sudo dnf upgrade -y && sudo dnf install -y cargo rustc git
 
 git clone https://github.com/Lunarequest/sddm2rpm
 
-cargo build --path ~/sddm2rpm
+cargo build --path ~/sddm2rpm/
 
 ```
 
 ### 3. Add sddm2rpm to $PATH
 This has the effect that you can run it directly from the Terminal, without entering the path manually.
 
-print path:
-```
-echo $PATH
-```
-
 add Cargo to Path:
 ```
 printf """
 export PATH=/var/home/user/.cargo/bin/:$PATH""" >> ~/.bashrc
+```
+
+print used paths:
+```
+echo $PATH
 ```
 
 ### 4. Use the tool
