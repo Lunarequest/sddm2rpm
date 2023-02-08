@@ -1,34 +1,43 @@
 A simple script to generate RPMs from sddm theme tar files from pling.
 
 ## Importance
-Fedora Distributions using OSTree have a read-only system image that is downloaded and can only be modified via `rpm-ostree override` on your device (without actually hosting your own repository).
+Fedora Distributions using OSTree as well as OpenSuse microOS have a read-only system image that is downloaded and can only be modified via `rpm-ostree override` / `transactional-updateo` n your device (without actually hosting your own repository).
 
-Currently this command can only remove or add RPM packages, not change, remove or add system files manually, which limits the customizability of these Distributions a lot, even though OSTree is a perfect solution for a solid system.
+Currently these commands can only remove or add RPM packages, not change, remove or add system files manually, which limits the customizability of these Distributions a lot, even though OSTree is a perfect solution for a solid system, automatic updates, e.g.
 
 What this tool does is creating an RPM whose only content is the SDDM theme, placed at the correct location. 
 
-## Usage in Fedora OSTree (Silverblue, Kinoite,...)
-Use Toolbox or Distrobox for compiling this app, as it needs some dependencies that would otherwise need to be layered.
+## Usage in microOS or Fedora OSTree (Silverblue, Kinoite,...)
+Use Toolbox or Distrobox for compiling this app. (Fedora has Toolbox preinstalled, microOS uses the more flexible Distrobox)
 
 ### 1. Container
 Toolbox:
 ```
-toolbox create fedora && toolbox enter fedora
+toolbox create build && toolbox enter build
 ```
 
 Distrobox:
 ```
-distrobox create fedora && distrobox enter fedora
+distrobox create build && distrobox enter build
 ```
 
 ### 2. Dependencies, Downloading
+Fedora: 
 ```
-sudo dnf upgrade -y && sudo dnf install -y cargo rustc git
+sudo dnf install -y cargo git printf
 
 git clone https://github.com/Lunarequest/sddm2rpm
 
 cargo build --path ~/sddm2rpm/
+```
 
+microOS:
+```
+sudo zypper in -y cargo git printf
+
+git clone https://github.com/Lunarequest/sddm2rpm
+
+cargo build --path ~/sddm2rpm/
 ```
 
 ### 3. Add sddm2rpm to $PATH
@@ -40,7 +49,7 @@ printf """
 export PATH=/var/home/user/.cargo/bin/:$PATH""" >> ~/.bashrc
 ```
 
-print cargo path:
+print cargo path to check:
 ```
 echo $PATH | grep .cargo
 ```
@@ -49,19 +58,25 @@ echo $PATH | grep .cargo
 - Go to pling.com
 - You can use this search engine: https://www.pling.com/find?search=%s
 - Download any SDDM theme
-- if not in .tar.gz format, unpack the folder and repack it as .tar.gz (using Ark for example)
+- if its a .zip, unpack the folder and repack it as .tar.gz or another format (using Ark for example)
 
 Convert the archive to an RPM:
 ```
-sddm2rpm path/to/sddm-theme.tar.gz --version=1.0
+sddm2rpm path/to/sddm-theme.tar.gz
 ```
-
-***It's important to add the version, otherwise the RPM can't be installed.***
 
 ### 5. Layer the rpm
 In Dolphin for example, you can copy the address of the rpm.
+
+Fedora:
 ```
 rpm-ostree install /path/to/sddm.rpm
+reboot
+```
+
+microOS: 
+```
+transactional-update pkg in path/to/sddm.rpm
 reboot
 ```
 
@@ -69,6 +84,4 @@ After rebooting, the SDDM design will appear in your settings!
 
 ---
 
-I will include lots of prebuilt RPM packages, so you dont have to do it yourself.
-
-This tool has potential to be used for other `rpm-ostree` overrides like cursors and settings too.
+* Comment: Due to update and ownership problems, there won't be any prebuilt RPMs on this Repository. *
