@@ -7,11 +7,12 @@ Currently these commands can only remove or add RPM packages, not change, remove
 
 What this tool does is creating an RPM whose only content is the SDDM theme, placed at the correct location. 
 
+
 ## Usage in microOS or Fedora OSTree (Silverblue, Kinoite,...)
 Use Toolbox or Distrobox for compiling this app. (Fedora has Toolbox preinstalled, microOS uses the more flexible Distrobox)
 
 ### 1. Container
-Toolbox:
+Toolbox
 ```
 toolbox create build && toolbox enter build
 ```
@@ -21,7 +22,15 @@ Distrobox:
 distrobox create build && distrobox enter build
 ```
 
-### 2. Dependencies, Downloading
+
+## 2.1 Easy installation
+You can skip building the program yourself and right away use the prebuilt binary:
+
+```
+cargo add sddm2rpm
+```
+
+### 2.2 Build it yourself
 Fedora: 
 ```
 sudo dnf install -y cargo git printf
@@ -40,7 +49,7 @@ git clone https://github.com/Lunarequest/sddm2rpm
 cargo build --path ~/sddm2rpm/
 ```
 
-### 3. Add sddm2rpm to $PATH
+### 3. Add sddm2rpm (cargo) to $PATH
 This has the effect that you can run it directly from the Terminal, without entering the path manually.
 
 add Cargo to Path:
@@ -84,4 +93,4 @@ After rebooting, the SDDM design will appear in your settings!
 
 ---
 
-* Comment: Due to update and ownership problems, there won't be any prebuilt RPMs on this Repository. *
+*Comment: Due to update and ownership problems, there won't be any prebuilt RPMs on this Repository.*
