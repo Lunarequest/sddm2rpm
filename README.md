@@ -1,10 +1,11 @@
 A simple script to generate RPMs from sddm theme tar files from pling.
 
 ## Importance
-Fedora Distributions using OSTree use a read-only system image, that is downloaded and can only be modified via `rpm-ostree override`.
-Currently this command can only remove or add RPM packages, not change, remove or add system files manually.
+Fedora Distributions using OSTree have a read-only system image that is downloaded and can only be modified via `rpm-ostree override` on your device (without actually hosting your own repository).
 
-What this tool does, is creating an RPM thats only content is the SDDM theme, placed at the correct location. 
+Currently this command can only remove or add RPM packages, not change, remove or add system files manually, which limits the customizability of these Distributions a lot, even though OSTree is a perfect solution for a solid system.
+
+What this tool does is creating an RPM whose only content is the SDDM theme, placed at the correct location. 
 
 ## Usage in Fedora OSTree (Silverblue, Kinoite,...)
 Use Toolbox or Distrobox for compiling this app, as it needs some dependencies that would otherwise need to be layered.
