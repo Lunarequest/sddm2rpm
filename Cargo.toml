@@ -2,8 +2,12 @@
 name = "sddm2rpm"
 version = "0.1.0"
 edition = "2018"
-description = "a simple cli tool to genrate rpms from plasma sddm tar.gz"
+description = "a simple cli tool to genrate rpms for sddm form tar.gz"
 license = "GPLv3"
+homepage = "https://github.com/Lunarequest/sddm2rpm/blob/mistress/README.md"
+documentation = "https://github.com/Lunarequest/sddm2rpm/blob/mistress/README.md"
+repository = "https://github.com/Lunarequest/sddm2rpm/"
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
