@@ -40,9 +40,9 @@ printf """
 export PATH=/var/home/user/.cargo/bin/:$PATH""" >> ~/.bashrc
 ```
 
-print used paths:
+print cargo path:
 ```
-echo $PATH
+echo $PATH | grep .cargo
 ```
 
 ### 4. Use the tool
