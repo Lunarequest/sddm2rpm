@@ -59,13 +59,13 @@ fn gen_build_commands(source: &String, name: &String) -> String {
     let current_dir = env::current_dir().unwrap();
     let wd = Path::new(&source);
     assert!(env::set_current_dir(wd).is_ok());
-    build_commands += format!("mkdir -p %{{buildroot}}/%{{_datadir}}/sddm/themes/{}\n", name).as_str();
-    
-    build_commands +=    format!(
-                "cp -r * %{{buildroot}}/%{{_datadir}}/sddm/themes/{}",
-                name
-            )
-            .as_str();
+    build_commands += format!(
+        "mkdir -p %{{buildroot}}/%{{_datadir}}/sddm/themes/{}\n",
+        name
+    )
+    .as_str();
+
+    build_commands += format!("cp -r * %{{buildroot}}/%{{_datadir}}/sddm/themes/{}", name).as_str();
     assert!(env::set_current_dir(current_dir).is_ok());
     build_commands
 }
