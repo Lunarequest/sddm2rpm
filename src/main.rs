@@ -1,4 +1,4 @@
-use clap::{Arg, Command};
+use clap::{value_parser, Arg, ArgAction, Command};
 use std::fs::write;
 use std::path::Path;
 mod archive;
@@ -21,18 +21,20 @@ fn main() {
         .version(VERSION)
         .about("takes sddm theme as tar.gz files and repacks them to rpms")
         .arg(
-            Arg::new("version")
-                .long("version")
+            Arg::new("pkg-version")
+                .long("pkg-version")
                 .help("version of package, defaults to 1.0.0")
                 .value_name("VERSION")
-                .takes_value(true),
+                .required(false)
+                .value_parser(value_parser!(String)),
         )
         .arg(
             Arg::new("license")
                 .long("license")
                 .help("license of package, defaults to GPLv3")
                 .value_name("LICENSE")
-                .takes_value(true),
+                .required(false)
+                .value_parser(value_parser!(String)),
         )
         .arg(
             Arg::new("output-spec")
@@ -40,49 +42,52 @@ fn main() {
                 .short('s')
                 .help("output spec file")
                 .value_name("SPEC")
-                .takes_value(false),
+                .action(ArgAction::SetTrue),
         )
         .arg(
             Arg::new("url")
                 .help("upstream url for rpm")
                 .long("url")
                 .value_name("URL")
-                .takes_value(true),
+                .required(false)
+                .value_parser(value_parser!(String)),
         )
         .arg(
             Arg::new("source")
                 .required(true)
                 .help("path to sddm archive")
-                .index(1),
+                .index(1)
+                .value_parser(value_parser!(String)),
         )
         .arg(Arg::new("dest").help("directory to unpack too").index(2))
         .get_matches();
-    let url;
-    match matches.value_of("url") {
-        Some(a) => url = Option::Some(a.to_owned().to_string()),
-        None => url = None,
-    }
-    let source = matches.value_of("source").unwrap().to_owned().to_string();
+    let url = match matches.get_one::<String>("url") {
+        Some(url) => Some(url.to_owned()),
+        None => None,
+    };
+
+    let source = matches
+        .get_one::<String>("source")
+        .unwrap()
+        .to_owned()
+        .to_string();
     let dest = matches
-        .value_of("dest")
-        .unwrap_or("./unpacked")
-        .to_owned()
-        .to_string();
+        .get_one::<String>("dest")
+        .unwrap_or(&"./unpacked".to_string())
+        .to_owned();
     let license = matches
-        .value_of("license")
-        .unwrap_or("GPLv3")
-        .to_owned()
-        .to_string();
+        .get_one::<String>("license")
+        .unwrap_or(&"GPLv3".to_string())
+        .to_owned();
     let version = matches
-        .value_of("version")
-        .unwrap_or("1.0.0")
-        .to_owned()
-        .to_string();
+        .get_one::<String>("version")
+        .unwrap_or(&"1.0.0".to_string())
+        .to_owned();
     // always clean up after yourself
     match archive::unpack(&source, &dest) {
         Ok(()) => {
             let name = name_from_file(&source);
-            if matches.is_present("output-spec") {
+            if matches.get_flag("output-spec") {
                 let spec = spec_builder::gen_spec(
                     &source,
                     dest.clone(),

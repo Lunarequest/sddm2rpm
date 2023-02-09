@@ -25,20 +25,20 @@ If you want to host rpms produced by this project I recomend using the `--output
 ## Arguments
 
 ```
-sddm2rpm 1.0.0
 takes sddm theme as tar.gz files and repacks them to rpms
 
-USAGE:
-    sddm2rpm [OPTIONS] <source> [dest]
+Usage: sddm2rpm [OPTIONS] <source> [dest]
 
-ARGS:
-    <source>    path to sddm archive
-    <dest>      directory to unpack too
+Arguments:
+  <source>  path to sddm archive
+  [dest]    directory to unpack too
 
-OPTIONS:
-    -h, --help                 Print help information
-        --license <LICENSE>    license of package, defaults to GPLv3
-    -s, --output-spec          output spec file
-        --url <URL>            upstream url for rpm
-        --version <VERSION>    version of package, defaults to 1.0.0
+Options:
+      --pkg-version <VERSION>  version of package, defaults to 1.0.0
+      --license <LICENSE>      license of package, defaults to GPLv3
+  -s, --output-spec            output spec file
+      --url <URL>              upstream url for rpm
+  -h, --help                   Print help
+  -V, --version                Print version
+
 ```

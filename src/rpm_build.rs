@@ -1,6 +1,7 @@
 use rpm::{self, RPMBuilder};
 use std::env;
 use std::path::Path;
+use std::process::exit;
 use std::str::FromStr;
 use sys_info;
 use walkdir;
@@ -63,5 +64,11 @@ pub fn buildrpm(source: &String, name: String, version: String, license: String)
     assert!(env::set_current_dir(current_dir).is_ok());
     let package = pkg.build().unwrap();
     let mut f = std::fs::File::create(format!("{}.rpm", name)).unwrap();
-    package.write(&mut f).unwrap();
+    match package.write(&mut f) {
+        Ok(()) => println!("created {name}.rpm"),
+        Err(e) => {
+            eprintln!("Failed to synathsize rpm {e}");
+            exit(1);
+        }
+    };
 }
