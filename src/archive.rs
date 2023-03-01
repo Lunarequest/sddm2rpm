@@ -4,7 +4,14 @@ use std::fs::{remove_dir_all, File};
 use std::path::Path;
 use tar::Archive;
 use xz2::read::XzDecoder;
+use zip::ZipArchive;
 use zstd::stream::Decoder;
+
+fn unpack_zip(path: &Path, dest: &Path) {
+    let zip = File::open(path).unwrap();
+    let mut zip_archive = ZipArchive::new(zip).unwrap();
+    zip_archive.extract(dest).unwrap();
+}
 
 fn unpack_gz(path: &Path, dest: &Path) {
     let tar_gz = File::open(path).unwrap();
@@ -46,6 +53,8 @@ pub fn unpack(source: &String, dest: &String) -> Result<(), ()> {
             unpack_bz2(source_path, dest_path);
         } else if source.ends_with(".zstd") {
             unpack_zstd(source_path, dest_path);
+        } else if source.ends_with("zip") {
+            unpack_zip(source_path, dest_path);
         } else {
             panic!("compression not implemented yet")
         }

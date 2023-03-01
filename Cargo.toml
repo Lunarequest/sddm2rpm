@@ -1,6 +1,6 @@
 [package]
 name = "sddm2rpm"
-version = "1.1.0"
+version = "1.2.0"
 edition = "2018"
 description = "a simple cli tool to genrate rpms for sddm form tar.gz"
 license = "GPL-3.0-or-later"
@@ -13,17 +13,19 @@ readme = "README.md"
 exclude = [".vscode/*",".pre-commit-config.yaml"]
 
 [dependencies]
-bzip2 = "0.4.3"
-clap = "4.1.4"
-flate2 = "1.0.20"
+bzip2 = "0.4.4"
+clap = "4.1.8"
+flate2 = "1.0.25"
 handlebars = "4.3.6"
-rpm-rs = "0.8.1"
+rpm = {git = "https://github.com/rpm-rs/rpm", features=["async-futures","with-file-async-tokio"]}
 serde = { version = "1.0.152", features = ["serde_derive"] }
 sys-info = "0.9.1"
 tar = "0.4.38"
+tokio = { version = "1.25.0", features = ["rt-multi-thread", "macros"] }
 walkdir = "2.3.2"
-xz2 = "0.1.6"
-zstd = { version = "0.9.0", default-features = false }
+xz2 = "0.1.7"
+zip = "0.6.4"
+zstd = { version = "0.12.3", default-features = false }
 
 [package.metadata.rpm]
 package = "sddm2rpm"

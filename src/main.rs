@@ -9,14 +9,15 @@ const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 fn name_from_file(filename: &String) -> String {
     return filename
-        .to_owned()
+        .replace(".zip", "")
         .replace(".tar", "")
         .replace(".xz", "")
         .replace(".bz2", "")
         .replace(".gz", "");
 }
 
-fn main() {
+#[tokio::main(flavor = "multi_thread")]
+async fn main() {
     let matches = Command::new("sddm2rpm")
         .version(VERSION)
         .about("takes sddm theme as tar.gz files and repacks them to rpms")
@@ -102,7 +103,7 @@ fn main() {
                 write(spec_path, spec).expect("unable to write spec");
                 println!("Please update the spec file with release number and change log.")
             }
-            rpm_build::buildrpm(&dest, name, version, license);
+            rpm_build::buildrpm(&dest, name, version, license).await;
             archive::cleanup(&dest);
         }
         Err(()) => {

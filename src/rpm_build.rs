@@ -6,7 +6,7 @@ use std::str::FromStr;
 use sys_info;
 use walkdir;
 
-fn buildpkg(name: String, version: String, license: String) -> RPMBuilder {
+async fn buildpkg(name: String, version: String, license: String) -> RPMBuilder {
     let os_release = match sys_info::linux_os_release() {
         Err(e) => {
             eprintln!("{}", e);
@@ -40,12 +40,12 @@ fn buildpkg(name: String, version: String, license: String) -> RPMBuilder {
     }
 }
 
-pub fn buildrpm(source: &String, name: String, version: String, license: String) {
+pub async fn buildrpm(source: &String, name: String, version: String, license: String) {
     let current_dir = env::current_dir().unwrap();
 
     let wd = Path::new(source);
     assert!(env::set_current_dir(wd).is_ok());
-    let mut pkg = buildpkg(name.clone(), version, license);
+    let mut pkg = buildpkg(name.clone(), version, license).await;
     for entry in walkdir::WalkDir::new(".")
         .into_iter()
         .filter_map(|e| e.ok())
@@ -58,7 +58,7 @@ pub fn buildrpm(source: &String, name: String, version: String, license: String)
                     .replace("./", "/usr/share/sddm/themes/")
             );
             let options = rpm::RPMFileOptions::new(dest);
-            pkg = pkg.with_file(file, options).expect("Error");
+            pkg = pkg.with_file_async(file, options).await.expect("Error");
         }
     }
     assert!(env::set_current_dir(current_dir).is_ok());
