@@ -1403,7 +1403,8 @@ checksum = "3582f63211428f83597b51b2ddb88e2a91a9d52d12831f9d08f5e624e8977422"
 [[package]]
 name = "rpm"
 version = "0.9.0"
-source = "git+https://github.com/rpm-rs/rpm#13419a3c51e2d5a14fe5ccaa04fe145e18ac1e0f"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5bfa8af5e3896583d2cc31b42c1a833b7f53bb63cd88588d745812c8a56e8e70"
 dependencies = [
  "chrono",
  "cpio",

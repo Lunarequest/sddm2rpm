@@ -17,7 +17,7 @@ bzip2 = "0.4.4"
 clap = "4.1.8"
 flate2 = "1.0.25"
 handlebars = "4.3.6"
-rpm = { git = "https://github.com/rpm-rs/rpm", features = ["async-futures", "with-file-async-tokio"] }
+rpm = { version = "0.9.0", features = ["async-futures", "with-file-async-tokio"] }
 serde = { version = "1.0.152", features = ["serde_derive"] }
 sys-info = "0.9.1"
 tar = "0.4.38"
