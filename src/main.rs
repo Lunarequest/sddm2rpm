@@ -7,13 +7,13 @@ mod spec_builder;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
-fn name_from_file(filename: &String) -> String {
-    return filename
+fn name_from_file(filename: &str) -> String {
+    filename
         .replace(".zip", "")
         .replace(".tar", "")
         .replace(".xz", "")
         .replace(".bz2", "")
-        .replace(".gz", "");
+        .replace(".gz", "")
 }
 
 #[tokio::main(flavor = "multi_thread")]
