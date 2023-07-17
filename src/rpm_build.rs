@@ -34,7 +34,7 @@ async fn buildpkg(name: &str, version: &str, license: &str) -> RPMBuilder {
     }
 }
 
-pub async fn buildrpm(source: &String, name: String, version: String, license: String) {
+pub async fn buildrpm(source: &String, name: &str, version: &str, license: &str) {
     let current_dir = env::current_dir().unwrap();
 
     let wd = Path::new(source);

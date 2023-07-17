@@ -98,7 +98,7 @@ async fn main() {
             write(spec_path, spec).expect("unable to write spec");
             println!("Please update the spec file with release number and change log.")
         }
-        rpm_build::buildrpm(&dest, name, version, license).await;
+        rpm_build::buildrpm(&dest, &name, &version, &license).await;
     }
     archive::cleanup(&dest);
 }
