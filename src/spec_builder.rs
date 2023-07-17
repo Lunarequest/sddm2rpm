@@ -25,9 +25,9 @@ pub struct SpecParams {
 }
 
 pub fn gen_spec(
-    source: &String,
+    source: &str,
     unpacked: String,
-    name: String,
+    name: &str,
     version: String,
     license: String,
     url: Option<String>,
@@ -37,24 +37,24 @@ pub fn gen_spec(
     let summary = format!("Auto genrated specfile for {} sddm theme", name);
     let mut handlebars = Handlebars::new();
     let data = SpecParams {
-        name: name.clone(),
-        summary: summary,
-        version: version,
-        license: license,
-        url: url,
-        build_commands: build_commands,
-        files: files,
+        name: name.to_string(),
+        summary,
+        version,
+        license,
+        url,
+        build_commands,
+        files,
         source: source.to_owned(),
     };
     handlebars
-        .register_template_string(&name.as_str(), DEFAULT_SPEC_TEMPLATE)
+        .register_template_string(&name, DEFAULT_SPEC_TEMPLATE)
         .unwrap();
     return Ok(handlebars
-        .render(&name.as_str(), &data)
+        .render(&name, &data)
         .expect("error rendering template"));
 }
 
-fn gen_build_commands(source: &String, name: &String) -> String {
+fn gen_build_commands(source: &str, name: &str) -> String {
     let mut build_commands = String::new();
     let current_dir = env::current_dir().unwrap();
     let wd = Path::new(&source);

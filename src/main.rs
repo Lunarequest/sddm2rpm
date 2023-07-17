@@ -62,11 +62,7 @@ async fn main() {
         )
         .arg(Arg::new("dest").help("directory to unpack too").index(2))
         .get_matches();
-    let url = match matches.get_one::<String>("url") {
-        Some(url) => Some(url.to_owned()),
-        None => None,
-    };
-
+    let url = matches.get_one::<String>("url").map(|s| s.into());
     let source = matches
         .get_one::<String>("source")
         .unwrap()
@@ -85,29 +81,24 @@ async fn main() {
         .unwrap_or(&"1.0.0".to_string())
         .to_owned();
     // always clean up after yourself
-    match archive::unpack(&source, &dest) {
-        Ok(()) => {
-            let name = name_from_file(&source);
-            if matches.get_flag("output-spec") {
-                let spec = spec_builder::gen_spec(
-                    &source,
-                    dest.clone(),
-                    name.clone(),
-                    version.clone(),
-                    license.clone(),
-                    url,
-                )
-                .unwrap();
-                let spec_file_name = format!("{}.spec", name);
-                let spec_path = Path::new(&spec_file_name);
-                write(spec_path, spec).expect("unable to write spec");
-                println!("Please update the spec file with release number and change log.")
-            }
-            rpm_build::buildrpm(&dest, name, version, license).await;
-            archive::cleanup(&dest);
+    if archive::unpack(&source, &dest) == Ok(()) {
+        let name = name_from_file(&source);
+        if matches.get_flag("output-spec") {
+            let spec = spec_builder::gen_spec(
+                &source,
+                dest.clone(),
+                &name,
+                version.clone(),
+                license.clone(),
+                url,
+            )
+            .unwrap();
+            let spec_file_name = format!("{}.spec", name);
+            let spec_path = Path::new(&spec_file_name);
+            write(spec_path, spec).expect("unable to write spec");
+            println!("Please update the spec file with release number and change log.")
         }
-        Err(()) => {
-            archive::cleanup(&dest);
-        }
+        rpm_build::buildrpm(&dest, name, version, license).await;
     }
+    archive::cleanup(&dest);
 }
