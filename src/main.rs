@@ -62,7 +62,7 @@ async fn main() {
         )
         .arg(Arg::new("dest").help("directory to unpack too").index(2))
         .get_matches();
-    let url = matches.get_one::<String>("url").map(|s| s.into());
+    let url = matches.get_one::<String>("url").map(|s| s.as_ref());
     let source = matches
         .get_one::<String>("source")
         .unwrap()
@@ -84,15 +84,8 @@ async fn main() {
     if archive::unpack(&source, &dest) == Ok(()) {
         let name = name_from_file(&source);
         if matches.get_flag("output-spec") {
-            let spec = spec_builder::gen_spec(
-                &source,
-                dest.clone(),
-                &name,
-                version.clone(),
-                license.clone(),
-                url,
-            )
-            .unwrap();
+            let spec =
+                spec_builder::gen_spec(&source, &dest, &name, &version, &license, url).unwrap();
             let spec_file_name = format!("{}.spec", name);
             let spec_path = Path::new(&spec_file_name);
             write(spec_path, spec).expect("unable to write spec");

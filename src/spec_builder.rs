@@ -5,53 +5,53 @@ use std::path::Path;
 
 const DEFAULT_SPEC_TEMPLATE: &str = include_str!("../templates/spec.hbs");
 #[derive(Serialize)]
-pub struct SpecParams {
+pub struct SpecParams<'a> {
     // Name of the RPM
-    pub name: String,
+    pub name: &'a str,
     // Description of the RPM
-    pub summary: String,
+    pub summary: &'a str,
     // version of package
-    pub version: String,
+    pub version: &'a str,
     // License of the *binary* contents of the RPM
-    pub license: String,
+    pub license: &'a str,
     // URL to a home page for this package
-    pub url: Option<String>,
+    pub url: Option<&'a str>,
     // commands to build the rpm
-    pub build_commands: String,
+    pub build_commands: &'a str,
     // files in rpm
-    pub files: String,
+    pub files: &'a str,
     // source files
-    pub source: String,
+    pub source: &'a str,
 }
 
 pub fn gen_spec(
     source: &str,
-    unpacked: String,
+    unpacked: &str,
     name: &str,
-    version: String,
-    license: String,
-    url: Option<String>,
+    version: &str,
+    license: &str,
+    url: Option<&str>,
 ) -> Result<String, ()> {
-    let build_commands = gen_build_commands(&unpacked, &name);
+    let build_commands = gen_build_commands(unpacked, name);
     let files = format!("%{{_datadir}}/sddm/themes/{}", name);
     let summary = format!("Auto genrated specfile for {} sddm theme", name);
     let mut handlebars = Handlebars::new();
     let data = SpecParams {
-        name: name.to_string(),
-        summary,
+        name,
+        summary: &summary,
         version,
         license,
         url,
-        build_commands,
-        files,
-        source: source.to_owned(),
+        build_commands: &build_commands,
+        files: &files,
+        source,
     };
     handlebars
-        .register_template_string(&name, DEFAULT_SPEC_TEMPLATE)
+        .register_template_string(name, DEFAULT_SPEC_TEMPLATE)
         .unwrap();
-    return Ok(handlebars
-        .render(&name, &data)
-        .expect("error rendering template"));
+    Ok(handlebars
+        .render(name, &data)
+        .expect("error rendering template"))
 }
 
 fn gen_build_commands(source: &str, name: &str) -> String {

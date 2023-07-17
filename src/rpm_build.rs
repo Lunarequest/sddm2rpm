@@ -34,12 +34,12 @@ async fn buildpkg(name: &str, version: &str, license: &str) -> RPMBuilder {
     }
 }
 
-pub async fn buildrpm(source: &String, name: &str, version: &str, license: &str) {
+pub async fn buildrpm(source: &str, name: &str, version: &str, license: &str) {
     let current_dir = env::current_dir().unwrap();
 
     let wd = Path::new(source);
     assert!(env::set_current_dir(wd).is_ok());
-    let mut pkg = buildpkg(&name, &version, &license).await;
+    let mut pkg = buildpkg(name, version, license).await;
     for entry in walkdir::WalkDir::new(".")
         .into_iter()
         .filter_map(|e| e.ok())
