@@ -3,22 +3,16 @@ use std::env;
 use std::path::Path;
 use std::process::exit;
 use std::str::FromStr;
-use sys_info;
-use walkdir;
 
-async fn buildpkg(name: String, version: String, license: String) -> RPMBuilder {
-    let os_release = match sys_info::linux_os_release() {
-        Err(e) => {
-            eprintln!("{}", e);
-            None
-        }
-        Ok(info) => Some(info),
-    };
+async fn buildpkg(name: &str, version: &str, license: &str) -> RPMBuilder {
+    let os_release = sys_info::linux_os_release().map_err(|e| {
+        eprintln!("{}", e);
+    });
     // rpm-rs handles setting up the compressor lets use it
     let pkg = rpm::RPMBuilder::new(
-        name.as_str(),
-        version.as_str(),
-        license.as_str(),
+        name,
+        version,
+        license,
         "noarch",
         "autogenrated sddm theme rpm",
     )
@@ -40,23 +34,21 @@ async fn buildpkg(name: String, version: String, license: String) -> RPMBuilder 
     }
 }
 
-pub async fn buildrpm(source: &String, name: String, version: String, license: String) {
+pub async fn buildrpm(source: &str, name: &str, version: &str, license: &str) {
     let current_dir = env::current_dir().unwrap();
 
     let wd = Path::new(source);
     assert!(env::set_current_dir(wd).is_ok());
-    let mut pkg = buildpkg(name.clone(), version, license).await;
+    let mut pkg = buildpkg(name, version, license).await;
     for entry in walkdir::WalkDir::new(".")
         .into_iter()
         .filter_map(|e| e.ok())
     {
         let file = entry.path();
         if Path::new(&file.as_os_str()).is_file() {
-            let dest = format!(
-                "{}",
-                file.to_string_lossy()
-                    .replace("./", "/usr/share/sddm/themes/")
-            );
+            let dest = file
+                .to_string_lossy()
+                .replace("./", "/usr/share/sddm/themes/");
             let options = rpm::RPMFileOptions::new(dest);
             pkg = pkg.with_file_async(file, options).await.expect("Error");
         }
