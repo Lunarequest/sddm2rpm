@@ -1,7 +1,7 @@
 A simple script to genrate RPMs from SDDM theme Archives from pling/store.kde.org.
 
 ## Background
-When using this one a read-only distro like OpenSUSE Kalpa or Fedora Kinoite, you can't install SDDM themes through the KCM, as `/usr/share` is read-only. My solution for this was `sddm2rpm`, a tool that reads the archives used by KDE plasmae to produce a working RPM that allows the SDDM theme to be installed and configured in the KCM.
+When using this one a read-only distro like OpenSUSE Kalpa or Fedora Kinoite, you can't install SDDM themes through the KCM, as `/usr/share` is read-only. My solution for this was `sddm2rpm`, a tool that reads the archives used by KDE plasma to produce a working RPM that allows the SDDM theme to be installed and configured in the KCM.
 
 ## Building 
 
