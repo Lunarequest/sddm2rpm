@@ -20,7 +20,7 @@ fn name_from_file(filename: &str) -> String {
 async fn main() {
     let matches = Command::new("sddm2rpm")
         .version(VERSION)
-        .about("takes sddm theme as tar.gz files and repacks them to rpms")
+        .about("Takes SDDM theme archives and repacks them to RPMs")
         .arg(
             Arg::new("pkg-version")
                 .long("pkg-version")
