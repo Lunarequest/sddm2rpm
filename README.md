@@ -1,7 +1,7 @@
-A simple script to genrate rpms from sddm theme tar files from pling.
+A simple script to genrate RPMs from SDDM theme Archives from pling/store.kde.org.
 
 ## Background
-When using this one a read-only distro like OpenSUSE MicroOS or Fedora Kinonite, you can't install sddm theme's through the KCM as `/usr/share` is readonly. My solution for this was `sddm2rpm` a tool that reads the archives used by KDE plasma and the pling store to produce a working rpm that allows the sddm theme to be install and configured in the KCM.
+When using this one a read-only distro like OpenSUSE Kalpa or Fedora Kinoite, you can't install SDDM themes through the KCM, as `/usr/share` is read-only. My solution for this was `sddm2rpm`, a tool that reads the archives used by KDE plasma to produce a working RPM that allows the SDDM theme to be installed and configured in the KCM.
 
 ## Building 
 
@@ -20,7 +20,7 @@ cargo install sddm2rpm
 ```
 for stable releases. 
 
-If you want to host rpms produced by this project I recomend using the `--output-spec` option to produce a working spec file you can use to produce rpms in [open build service](https://build.opensuse.org) & [copr](https://copr.fedorainfracloud.org).
+If you want to host RPMs produced by this project I recommend using the `--output-spec` option to produce a working spec file. You can use it to produce rpms in [Open Build Service](https://build.opensuse.org) & [COPR](https://copr.fedorainfracloud.org).
 
 ## Arguments
 
